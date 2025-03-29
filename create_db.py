@@ -11,7 +11,7 @@ def criar_db():
             EMAIL TEXT,
             PASSWORD TEXT,
             NOME TEXT,
-            AUTHORIZED INTEGER
+            AUTHORIZED INTEGER DEFAULT 0
         )
     ''')
 

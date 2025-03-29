@@ -25,12 +25,10 @@ def login():
     
     # tokenizando as informacoes do usuario
     encoded_password = jwt.encode({"password": response['senha']}, key, algorithm="HS256")
-    encoded_email = jwt.encode({"email": response['email']}, key, algorithm="HS256")
-
-    
-    cursor.execute('''
-        SELECT * FROM tbl_usuarios WHERE PASSWORD = ? 
-    ''', (encoded_email, encoded_password))
+    print(encoded_password)
+    print(type(encoded_password))
+    print(len(encoded_password))
+    cursor.execute(f" SELECT * FROM tbl_usuarios WHERE PASSWORD = '{encoded_password}'")
 
     dados_usuario = cursor.fetchone()
     if dados_usuario:
@@ -66,7 +64,7 @@ def signin():
     if cursor.rowcount > 0:
         connection.commit()
         connection.close()
-        return redirect('/login')
+        return redirect('/login'), 200
 
     return jsonify({"erro": "houve um erro ao fazer signin"})
 
