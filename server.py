@@ -13,7 +13,7 @@ def index():
 
 
 # fazendo a rota de login
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def login():
 
     #configs basicas
@@ -28,18 +28,19 @@ def login():
     print(encoded_password)
     print(type(encoded_password))
     print(len(encoded_password))
-    cursor.execute(f" SELECT * FROM tbl_usuarios WHERE PASSWORD = '{encoded_password}'")
+    cursor.execute(f" SELECT * FROM tbl_usuarios WHERE PASSWORD = ? ", (encoded_password,))
 
     dados_usuario = cursor.fetchone()
     if dados_usuario:
         cursor.execute('''
             UPDATE tbl_usuarios SET AUTHORIZED = '1' WHERE PASSWORD = ?
-        ''', (encoded_password))
+        ''', (encoded_password,))
         connection.commit()
         connection.close()
         return redirect('/'), 200
 
-    
+    cursor.close()
+    connection.close()
 
     return jsonify({"mensagem": "deu problema"})
 
